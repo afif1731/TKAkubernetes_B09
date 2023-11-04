@@ -34,11 +34,14 @@ Tambahkan minikube.exe bianry ke PATH. Pastikan PowerShell berhalan sebagai Admi
 New-Item -Path 'c:F\' -Name 'minikube' -ItemType Directory -Force
 Invoke-WebRequest -OutFile 'c:\minikube\minikube.exe' -Uri 'https://github.com/kubernetes/minikube/releases/latest/download/minikube-windows-amd64.exe' -UseBasicParsing
 ```
-Setelah installasi minikube sudah dilakukan, mulai kluster Kubernetes dengan command berikut (cd C:\minikube):
+Setelah installasi minikube sudah dilakukan, mulai kluster Kubernetes dengan command berikut:
+```
+cd C:\minikube
+```
 ```
 .\minikube start
 ```
-Kalau sudah selesai install,
+Kalau sudah selesai install, masuk ke directory tempat kubectl sebelumnya (cd [directoryPathmu terserah di mana])
 ```
 kubectl cluster-info
 ```
@@ -87,7 +90,10 @@ kubectl delete pod wilsoooonnnn-b09
 ```
 
 ## D (Label)
-buat file WILSOOOONNNN.yaml baru
+edit file WILSOOOONNNN.yaml lama
+```
+notepad WILSOOOONNNN_B09.yaml
+```
 isinya masukkan ini
 ```
 apiVersion: v1
@@ -128,6 +134,10 @@ kubectl label po wilsoooonnnn-b09 env=debug --overwrite
 ```
 
 Menjadwalkan pod ke Nodes tertentu, buat file ADAAAAAMMMM_B09.yaml
+```
+notepad ADAAAAAMMMM_B09.yaml
+```
+isi ADAAAAAMMMM_B09.yaml
 ```
 apiVersion: v1
 kind: Pod
@@ -174,6 +184,10 @@ kubectl get po -n kube-system
 ```
 buat yaml namespace baru. EL_GATO_B09.yaml
 ```
+notepad EL_GATO_B09.yaml
+```
+isi EL_GATO_B09.yaml
+```
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -193,17 +207,23 @@ Hapus pod wilsoooonnnn
 ```
 kubectl delete po wilsoooonnnn-b09
 ```
-hapus pod berdasarkan label
-```
-kubectl delete po -l hotel=trivago
-```
+
 hapus namespace
 ```
 kubectl delete ns elgato-b09
 ```
 
+hapus all
+```
+kubectl delete all --all
+```
+
 ## G (Replication dst whatever)
 Menjaga pod tetap sehat dengan Liveness Probe. Buat file BIIIIILLLLLLLL_B09.yaml
+```
+notepad BIIIIILLLLLLLL_B09.yaml
+```
+isi BIIIIILLLLLLLL_B09.yaml
 ```
 apiVersion: v1
 kind: Pod
@@ -259,6 +279,9 @@ kubectl delete secret my-secret
 ## I (Data Injections)
 buat configmap ADAAAAAMMMM_B09.yaml
 ```
+notepad ADAAAAAMMMM_B09.yaml
+```
+```
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -271,6 +294,9 @@ data:
 kubectl create -f ADAAAAAMMMM_B09.yaml
 ```
 buat pod baru dengan reference configmap, EL_GATO_B09.yaml
+```
+notepad EL_GATO_B09.yaml
+```
 ```
 apiVersion: v1
 kind: Pod
@@ -290,9 +316,16 @@ spec:
 ```
 kubectl create -f EL_GATO_B09.yaml
 ```
+periksa
+```
+kubectl get po el-gato-b09 -o yaml
+```
 
 ## J (Volume)
 buat file GATOEL_B09.yaml
+```
+notepad GATOEL_B09.yaml
+```
 ```
 apiVersion: v1
 kind: Pod
@@ -312,6 +345,76 @@ spec:
 jalanin jangan lupa
 ```
 kubectl create -f GATOEL_B09.yaml
+```
+
+## K (Rolling update)
+buat deployment LLLIIIB_B09.yaml
+```
+notepad LLLIIIB.yaml
+```
+isinya
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llliiib-b09
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: trivago-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: trivago-app
+    spec:
+      containers:
+      - name: my-container
+        image: nginx
+```
+jalanin dulu
+```
+kubectl create -f LLLIIIB_B09.yaml
+```
+
+lakukan rolling update
+```
+kubectl set image deployment/llliiib-b09 my-container=nginx:v2
+```
+
+## L (jobs)
+buat file BAKEDCAT_B09.yaml
+```
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: bakedcat-b09
+spec:
+  completions: 10
+  parallelism: 3
+  template:
+    spec:
+      containers:
+      - name: worker
+        image: nginx
+      restartPolicy: Never
+```
+jalankan
+```
+kubectl create -f BAKEDCAT_B09.yaml
+```
+periksa job
+```
+kubectl describe job bakedcat-b09
+```
+delete job
+```
+kubectl delete job bakedcat-b09
 ```
 
 ## M (Scaling)
