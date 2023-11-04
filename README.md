@@ -83,10 +83,36 @@ Lihat logs pods via:
 ```
 kubectl logs wilsoooonnnn-b09
 ```
+expose pod
+```
+kubectl port-forward wilsoooonnnn-b09 8888:8080
+```
+buka terminal baru buat cek
+```
+curl localhost:8888
+```
 
 Hapus Pod menggunakan
 ```
 kubectl delete pod wilsoooonnnn-b09
+```
+## C2 (Deploy)
+jalankan command
+```
+kubectl create deployment biiiillllllll-b09 --image=knrt10/kubia --port=8080
+```
+expose
+```
+kubectl expose deploy biiiillllllll-b09 --type=LoadBalancer --name biiiillllllll-http
+```
+cek via:
+```
+kubectl get svc
+```
+
+hapus deploy
+```
+kubectl delete deploy biiiillll-b09
 ```
 
 ## D (Label)
